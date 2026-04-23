@@ -1,0 +1,150 @@
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import PlainTextResponse
+import sys, os, datetime
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+import storage
+
+router = APIRouter()
+
+@router.get("/markdown", response_class=PlainTextResponse)
+def export_markdown():
+    monolith = storage.load("monolith.json")
+    services = storage.load("services.json")
+    analysis = storage.load("analysis.json")
+    plan = storage.load("migration_plan.json")
+
+    if not plan:
+        raise HTTPException(status_code=404, detail="No migration plan found. Generate it first.")
+
+    lines = []
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    system_name = monolith.get("system_name", "Unknown System") if monolith else "Unknown System"
+
+    lines += [
+        f"# MicroShift Migration Report",
+        f"**System:** {system_name}",
+        f"**Generated:** {now}",
+        f"**Strategy:** {plan.get('pattern', 'Strangler Fig Pattern')}",
+        "",
+        "---",
+        "",
+        "## Executive Summary",
+        "",
+    ]
+
+    summary = plan.get("summary", {})
+    lines += [
+        f"| Metric | Value |",
+        f"|--------|-------|",
+        f"| Total Migration Steps | {summary.get('total_steps', '?')} |",
+        f"| Services to Extract | {summary.get('total_services_to_migrate', '?')} |",
+        f"| High-Risk Steps | {summary.get('high_risk_steps', '?')} |",
+        f"| Estimated Duration | {summary.get('estimated_duration_weeks', '?')} weeks |",
+        f"| Recommended Team Size | {summary.get('recommended_team_size', '?')} engineers |",
+        "",
+    ]
+
+    if analysis:
+        asummary = analysis.get("summary", {})
+        lines += [
+            "## Risk Analysis",
+            "",
+            f"**Overall Risk Level:** `{analysis.get('overall_risk', '?').upper()}`",
+            "",
+            f"| Metric | Count |",
+            f"|--------|-------|",
+            f"| Total Modules | {asummary.get('total_modules', '?')} |",
+            f"| High-Risk Modules | {asummary.get('high_risk_modules', '?')} |",
+            f"| Medium-Risk Modules | {asummary.get('medium_risk_modules', '?')} |",
+            f"| Cross-Service Dependencies | {asummary.get('cross_service_dep_count', '?')} |",
+            f"| Circular Dependencies | {'Yes ⚠️' if asummary.get('has_cycles') else 'None ✅'} |",
+            f"| Unmapped Modules | {asummary.get('unmapped_count', 0)} |",
+            "",
+            "### Module Risk Table",
+            "",
+            "| Module | Risk Level | Score | In Deps | Out Deps |",
+            "|--------|-----------|-------|---------|---------|",
+        ]
+        for r in analysis.get("module_risks", []):
+            emoji = "🔴" if r["risk_level"] == "high" else "🟡" if r["risk_level"] == "medium" else "🟢"
+            lines.append(f"| {r['module_name']} | {emoji} {r['risk_level'].capitalize()} | {r['risk_score']} | {r['incoming_deps']} | {r['outgoing_deps']} |")
+        lines.append("")
+
+    lines += [
+        "## Business Continuity Risks",
+        "",
+    ]
+    for risk in plan.get("continuity_risks", []):
+        sev = "🔴" if risk["severity"] == "high" else "🟡"
+        lines += [
+            f"### {sev} {risk['risk']}",
+            f"**Impact:** {risk['impact']}",
+            f"**Mitigation:** {risk['mitigation']}",
+            "",
+        ]
+
+    lines += [
+        "## Migration Plan",
+        "",
+        f"*Pattern: {plan.get('pattern_description', '')}*",
+        "",
+    ]
+
+    for step in plan.get("steps", []):
+        risk_emoji = "🔴" if step["risk_level"] == "high" else "🟡" if step["risk_level"] == "medium" else "🟢"
+        downtime = "⚠️ Downtime Risk" if step.get("downtime_risk") else "✅ No Downtime"
+        lines += [
+            f"### Step {step['step']}: {step['title']}",
+            f"**Phase:** {step['phase']} | **Risk:** {risk_emoji} {step['risk_level'].capitalize()} | **{downtime}**",
+            f"**Duration:** {step.get('estimated_duration', 'TBD')}",
+            "",
+            step["description"],
+            "",
+            "**Actions:**",
+        ]
+        for action in step.get("actions", []):
+            lines.append(f"- {action}")
+        lines += [
+            "",
+            f"**Continuity Note:** {step.get('continuity_notes', '')}",
+            "",
+            "---",
+            "",
+        ]
+
+    if services and services.get("services"):
+        lines += [
+            "## Target Microservices",
+            "",
+            "| Service | Technology | Port | Mapped Modules |",
+            "|---------|------------|------|----------------|",
+        ]
+        for svc in services.get("services", []):
+            lines.append(f"| {svc['name']} | {svc.get('technology', '?')} | {svc.get('port', '?')} | {', '.join(svc.get('mapped_modules', []))} |")
+        lines.append("")
+
+    lines += [
+        "---",
+        "",
+        "*Report generated by MicroShift — Migration Planning Tool*",
+        "*Software Engineering Project — Group 8*",
+    ]
+
+    return "\n".join(lines)
+
+
+@router.get("/json")
+def export_json():
+    plan = storage.load("migration_plan.json")
+    analysis = storage.load("analysis.json")
+    monolith = storage.load("monolith.json")
+    services = storage.load("services.json")
+    if not plan:
+        raise HTTPException(status_code=404, detail="No migration plan found.")
+    return {
+        "monolith": monolith,
+        "services": services,
+        "analysis": analysis,
+        "migration_plan": plan,
+        "exported_at": str(datetime.datetime.now())
+    }
