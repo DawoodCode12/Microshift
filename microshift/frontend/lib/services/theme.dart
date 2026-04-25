@@ -28,7 +28,6 @@ ThemeData buildTheme() {
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.bg,
     colorScheme: const ColorScheme.light(
-      background: AppColors.bg,
       surface: AppColors.surface,
       primary: AppColors.accent,
       secondary: AppColors.success,
@@ -51,7 +50,7 @@ ThemeData buildTheme() {
       bodyMedium:     GoogleFonts.inter(color: AppColors.textSecondary, fontSize: 13),
       labelSmall:     GoogleFonts.inter(color: AppColors.textMuted, fontSize: 11),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.card,
       elevation: 0,
       shape: RoundedRectangleBorder(

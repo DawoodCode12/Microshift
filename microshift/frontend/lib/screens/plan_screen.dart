@@ -89,7 +89,7 @@ class PlanScreen extends StatelessWidget {
       padding: const EdgeInsets.all(32),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: const Color(0xFFFFFBEB), shape: BoxShape.circle),
+            decoration: const BoxDecoration(color: Color(0xFFFFFBEB), shape: BoxShape.circle),
             child: const Icon(Icons.map_outlined, color: AppColors.warning, size: 44)),
         const SizedBox(height: 20),
         Text('No Migration Plan Yet', style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 17, fontWeight: FontWeight.w600)),
@@ -202,7 +202,7 @@ class PlanScreen extends StatelessWidget {
         // Step header
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-          decoration: BoxDecoration(color: rBg, borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), border: Border(bottom: BorderSide(color: AppColors.border))),
+          decoration: BoxDecoration(color: rBg, borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), border: const Border(bottom: BorderSide(color: AppColors.border))),
           child: Row(children: [
             Container(
               width: 28, height: 28,

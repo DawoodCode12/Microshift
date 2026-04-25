@@ -118,7 +118,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               decoration: BoxDecoration(color: AppColors.accentGlow, borderRadius: BorderRadius.circular(5)),
               child: Text('P${svc['priority'] ?? 1}', style: GoogleFonts.inter(color: AppColors.accent, fontSize: 10, fontWeight: FontWeight.w700)),
             ),
-            IconButton(icon: Icon(Icons.edit_outlined, size: 16, color: AppColors.textSecondary), onPressed: () => _editService(idx), padding: EdgeInsets.zero, constraints: const BoxConstraints()),
+            IconButton(icon: const Icon(Icons.edit_outlined, size: 16, color: AppColors.textSecondary), onPressed: () => _editService(idx), padding: EdgeInsets.zero, constraints: const BoxConstraints()),
             const SizedBox(width: 4),
             IconButton(icon: const Icon(Icons.delete_outline_rounded, size: 16, color: AppColors.danger), onPressed: () => setState(() => _services.removeAt(idx)), padding: EdgeInsets.zero, constraints: const BoxConstraints()),
           ]),
@@ -164,7 +164,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
             Expanded(child: TextField(controller: portCtrl, decoration: const InputDecoration(labelText: 'Port'), keyboardType: TextInputType.number)),
             const SizedBox(width: 10),
             Expanded(child: DropdownButtonFormField<int>(
-              value: priority, decoration: const InputDecoration(labelText: 'Priority'),
+              initialValue: priority, decoration: const InputDecoration(labelText: 'Priority'),
               dropdownColor: AppColors.surface,
               items: [1,2,3,4,5].map((v) => DropdownMenuItem(value: v, child: Text('$v', style: GoogleFonts.inter(color: AppColors.textPrimary)))).toList(),
               onChanged: (v) => ss(() => priority = v!))),
@@ -180,7 +180,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
               value: selected.contains(mod),
               title: Text(mod, style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 13)),
               activeColor: AppColors.accent, dense: true, contentPadding: EdgeInsets.zero,
-              onChanged: (v) => ss(() { if (v == true) selected.add(mod); else selected.remove(mod); }),
+              onChanged: (v) => ss(() { if (v == true) {
+                selected.add(mod);
+              } else {
+                selected.remove(mod);
+              } }),
             )),
           ],
         ]))),

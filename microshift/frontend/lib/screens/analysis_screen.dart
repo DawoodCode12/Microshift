@@ -51,7 +51,7 @@ class AnalysisScreen extends StatelessWidget {
     return Center(child: Padding(
       padding: const EdgeInsets.all(32),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Container(padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: AppColors.accentGlow, shape: BoxShape.circle),
+        Container(padding: const EdgeInsets.all(20), decoration: const BoxDecoration(color: AppColors.accentGlow, shape: BoxShape.circle),
             child: const Icon(Icons.analytics_outlined, color: AppColors.accent, size: 44)),
         const SizedBox(height: 20),
         Text('No analysis yet', style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 17, fontWeight: FontWeight.w600)),
