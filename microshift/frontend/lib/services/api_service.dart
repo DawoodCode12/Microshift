@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ApiService {
   // Change this to your Railway URL after deployment:
   // static const String baseUrl = 'https://your-app.up.railway.app';
-  static const String baseUrl = 'http://127.0.0.1:8000';
+  static const String baseUrl = 'https://microshift-production.up.railway.app';
 
   static Future<Map<String, dynamic>> get(String path) async {
     final response = await http.get(
