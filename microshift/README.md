@@ -1,11 +1,11 @@
-# 🚀 MicroShift — Monolith to Microservices Migration Planner
+#  MicroShift — Monolith to Microservices Migration Planner
 ### Software Engineering Project — Group 8 | DUET
 
 A full-stack migration planning and simulation tool that helps engineering teams plan how to break a monolithic system into microservices while maintaining business continuity.
 
----
 
-## 📁 Project Structure
+
+## Project Structure
 
 ```
 microshift/
@@ -53,11 +53,8 @@ microshift/
             ├── services_screen.dart    # Define target microservices
             ├── analysis_screen.dart    # Risk analysis dashboard
             └── plan_screen.dart        # Migration plan + export
-```
 
----
-
-## 🔧 LOCAL SETUP GUIDE
+## LOCAL SETUP GUIDE
 
 ### Prerequisites
 
@@ -113,8 +110,7 @@ Start the server:
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-✅ You should see:
-```
+
 INFO:     Uvicorn running on http://0.0.0.0:8000
 INFO:     Application startup complete.
 ```
@@ -197,7 +193,7 @@ Then tap **EXPORT** on the Plan screen to get a full Markdown report.
 
 ---
 
-## 🚂 RAILWAY DEPLOYMENT (Online Hosting)
+## RAILWAY DEPLOYMENT (Online Hosting)
 
 ### Step 1: Create a Railway Account
 
@@ -264,9 +260,7 @@ flutter run
 flutter build apk --release
 ```
 
----
-
-## 📤 GITHUB SETUP
+## GITHUB SETUP
 
 ### Step 1: Initialize Git
 
@@ -294,7 +288,7 @@ git push -u origin main
 
 ---
 
-## 🐛 COMMON ERRORS & FIXES
+## COMMON ERRORS & FIXES
 
 ### Backend Issues
 
@@ -347,9 +341,7 @@ git push -u origin main
 
 Full interactive docs: `http://localhost:8000/docs`
 
----
-
-## 📝 PROJECT CONCEPTS DEMONSTRATED
+## PROJECT CONCEPTS DEMONSTRATED
 
 This project demonstrates:
 
@@ -361,6 +353,4 @@ This project demonstrates:
 6. **State Management** — Flutter Provider pattern with ChangeNotifier
 7. **Cross-Platform UI** — Single Flutter codebase for Android + Windows + Web
 
----
-
-## 👥 Group 8 | Software Engineering | DUET
+## | Software Engineering 
